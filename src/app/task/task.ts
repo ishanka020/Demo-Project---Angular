@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 interface TaskArray {
   text: string;
   completed: boolean;
+  isEditing?: boolean;
 }
 
 @Component({
@@ -65,5 +66,18 @@ export class Task implements OnInit {
       return this.tasks.filter((t) => t.completed);
     }
     return this.tasks;
+  }
+
+  editTask(index: number) {
+    this.tasks[index].isEditing = true;
+  }
+
+  saveTask(index: number) {
+    this.tasks[index].isEditing = false;
+    this.saveTasks();
+  }
+
+  cancelEdit(index: number) {
+    this.tasks[index].isEditing = false;
   }
 }

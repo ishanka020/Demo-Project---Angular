@@ -16,8 +16,16 @@
 
   <ul>
     <li *ngFor="let task of filteredTasks; let i = index">
-      <span [class.completed]="task.completed">{{ task.text }}</span>
+      <span *ngIf="!task.isEditing" [class.completed]="task.completed">{{ task.text }}</span>
+
+      <input *ngIf="task.isEditing" [(ngModel)]="task.text" />
+
       <input type="checkbox" [checked]="task.completed" (change)="toggleTask(i)" />
+
+      <button *ngIf="!task.isEditing" (click)="editTask(i)">✏️ Edit</button>
+      <button *ngIf="task.isEditing" (click)="saveTask(i)">💾 Save</button>
+      <button *ngIf="task.isEditing" (click)="cancelEdit(i)">❌ Cancel</button>
+
       <button (click)="removeTask(i)">Remove</button>
     </li>
   </ul>
