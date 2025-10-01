@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 interface TaskArray {
   text: string;
@@ -9,7 +10,7 @@ interface TaskArray {
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './task.html',
   styleUrls: ['./task.css'],
 })
@@ -20,6 +21,8 @@ export class Task implements OnInit {
     // {text:'Practice daily', completed:false},
   ];
   newTask: string = '';
+
+  filter: string = 'all';
 
   ngOnInit(): void {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -39,6 +42,7 @@ export class Task implements OnInit {
   addTask() {
     if (this.newTask.trim() !== '') {
       this.tasks.push({ text: this.newTask, completed: false });
+      console.log('Tasks:', this.tasks);
       this.newTask = '';
       this.saveTasks();
     }
@@ -52,5 +56,14 @@ export class Task implements OnInit {
   toggleTask(index: number) {
     this.tasks[index].completed = !this.tasks[index].completed;
     this.saveTasks();
+  }
+
+  get filteredTasks(): TaskArray[] {
+    if (this.filter === 'active') {
+      return this.tasks.filter((t) => !t.completed);
+    } else if (this.filter === 'completed') {
+      return this.tasks.filter((t) => t.completed);
+    }
+    return this.tasks;
   }
 }

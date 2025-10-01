@@ -4,18 +4,23 @@
     <input [(ngModel)]="newTask" placeholder="Enter new task" />
     <button (click)="addTask()">Add Task</button>
   </div>
-  <ul>
-    @for (task of tasks; track $index) {
-    <li>
-      <span [class.completed]="task.completed">{{task.text}}</span>
-      <input type="checkbox" [checked]="task.completed" (change)="toggleTask($index)" />
 
-      <button (click)="removeTask($index)">Remove</button>
+  <div class="filters">
+    <label for="filterSelect">Filter</label>
+    <select id="filterSelect" [(ngModel)]="filter">
+      <option value="all">All</option>
+      <option value="active">Active</option>
+      <option value="completed">Completed</option>
+    </select>
+  </div>
+
+  <ul>
+    <li *ngFor="let task of filteredTasks; let i = index">
+      <span [class.completed]="task.completed">{{ task.text }}</span>
+      <input type="checkbox" [checked]="task.completed" (change)="toggleTask(i)" />
+      <button (click)="removeTask(i)">Remove</button>
     </li>
-    }
   </ul>
 
-  @if (tasks.length === 0) {
-  <p>No tasks yet. Add one above!</p>
-  }
+  <p *ngIf="tasks.length === 0">No tasks yet. Add one above!</p>
 </div>
