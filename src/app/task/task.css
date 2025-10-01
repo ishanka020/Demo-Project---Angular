@@ -84,3 +84,8 @@
   color: #666;
   margin-top: 15px;
 }
+
+.completed {
+   text-decoration: line-through;
+  color: #888;
+}

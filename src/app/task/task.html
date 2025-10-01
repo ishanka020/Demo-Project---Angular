@@ -1,19 +1,21 @@
 <div class="task-container">
   <h2>My Task List</h2>
-    <div class="task-input">
-        <input [(ngModel)]="newTask" placeholder="Enter new task" />
-        <button (click)="addTask()">Add Task</button>
-    </div>
+  <div class="task-input">
+    <input [(ngModel)]="newTask" placeholder="Enter new task" />
+    <button (click)="addTask()">Add Task</button>
+  </div>
   <ul>
     @for (task of tasks; track $index) {
-      <li>
-        {{ task }}
-        <button (click)="removeTask($index)">Remove</button>
-      </li>
+    <li>
+      <span [class.completed]="task.completed">{{task.text}}</span>
+      <input type="checkbox" [checked]="task.completed" (change)="toggleTask($index)" />
+
+      <button (click)="removeTask($index)">Remove</button>
+    </li>
     }
   </ul>
 
   @if (tasks.length === 0) {
-    <p>No tasks yet. Add one above!</p>
+  <p>No tasks yet. Add one above!</p>
   }
 </div>
