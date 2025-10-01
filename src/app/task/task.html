@@ -16,7 +16,14 @@
 
   <ul>
     <li *ngFor="let task of filteredTasks; let i = index">
-      <span *ngIf="!task.isEditing" [class.completed]="task.completed">{{ task.text }}</span>
+      <span
+        *ngIf="!task.isEditing"
+        [class.completed]="task.completed"
+        (click)="goToTaskDetail(task.id)"
+        style="cursor: pointer; flex: 1"
+      >
+        {{ task.text }}
+      </span>
 
       <input *ngIf="task.isEditing" [(ngModel)]="task.text" />
 
@@ -25,7 +32,6 @@
       <button *ngIf="!task.isEditing" (click)="editTask(i)">✏️ Edit</button>
       <button *ngIf="task.isEditing" (click)="saveTask(i)">💾 Save</button>
       <button *ngIf="task.isEditing" (click)="cancelEdit(i)">❌ Cancel</button>
-
       <button (click)="removeTask(i)">Remove</button>
     </li>
   </ul>

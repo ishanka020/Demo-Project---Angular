@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface TaskArray {
+  id: number;
   text: string;
   completed: boolean;
   isEditing?: boolean;
@@ -30,6 +32,12 @@ export class Task implements OnInit {
       const savedTasks = localStorage.getItem('tasks');
       if (savedTasks) {
         this.tasks = JSON.parse(savedTasks);
+
+        this.tasks.forEach((task, index) => {
+          if (!task.id) {
+            task.id = index + 1;
+          }
+        });
       }
     }
   }
@@ -42,8 +50,9 @@ export class Task implements OnInit {
 
   addTask() {
     if (this.newTask.trim() !== '') {
-      this.tasks.push({ text: this.newTask, completed: false });
-      console.log('Tasks:', this.tasks);
+      const newId = this.tasks.length > 0 ? Math.max(...this.tasks.map((t) => t.id)) + 1 : 1;
+
+      this.tasks.push({ id: newId, text: this.newTask, completed: false });
       this.newTask = '';
       this.saveTasks();
     }
@@ -79,5 +88,15 @@ export class Task implements OnInit {
 
   cancelEdit(index: number) {
     this.tasks[index].isEditing = false;
+  }
+
+  constructor(private router: Router) {}
+
+  goToTaskDetail(taskId: number) {
+    if (taskId !== undefined) {
+      this.router.navigate(['/tasks', taskId]);
+    } else {
+      console.warn('Task ID is undefined!');
+    }
   }
 }
