@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { Task } from './task/task';
-
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Task],   
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
 })
 export class AppComponent {
   title = 'my-task-app';

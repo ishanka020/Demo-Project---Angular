@@ -1,19 +1,40 @@
 <div class="task-container">
   <h2>My Task List</h2>
-    <div class="task-input">
-        <input [(ngModel)]="newTask" placeholder="Enter new task" />
-        <button (click)="addTask()">Add Task</button>
-    </div>
+  <div class="task-input">
+    <input [(ngModel)]="newTask" placeholder="Enter new task" />
+    <button (click)="addTask()">Add Task</button>
+  </div>
+
+  <div class="filters">
+    <label for="filterSelect">Filter</label>
+    <select id="filterSelect" [(ngModel)]="filter">
+      <option value="all">All</option>
+      <option value="active">Active</option>
+      <option value="completed">Completed</option>
+    </select>
+  </div>
+
   <ul>
-    @for (task of tasks; track $index) {
-      <li>
-        {{ task }}
-        <button (click)="removeTask($index)">Remove</button>
-      </li>
-    }
+    <li *ngFor="let task of filteredTasks; let i = index">
+      <span
+        *ngIf="!task.isEditing"
+        [class.completed]="task.completed"
+        (click)="goToTaskDetail(task.id)"
+        style="cursor: pointer; flex: 1"
+      >
+        {{ task.text }}
+      </span>
+
+      <input *ngIf="task.isEditing" [(ngModel)]="task.text" />
+
+      <input type="checkbox" [checked]="task.completed" (change)="toggleTask(i)" />
+
+      <button *ngIf="!task.isEditing" (click)="editTask(i)">✏️ Edit</button>
+      <button *ngIf="task.isEditing" (click)="saveTask(i)">💾 Save</button>
+      <button *ngIf="task.isEditing" (click)="cancelEdit(i)">❌ Cancel</button>
+      <button (click)="removeTask(i)">Remove</button>
+    </li>
   </ul>
 
-  @if (tasks.length === 0) {
-    <p>No tasks yet. Add one above!</p>
-  }
+  <p *ngIf="tasks.length === 0">No tasks yet. Add one above!</p>
 </div>

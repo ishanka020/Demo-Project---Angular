@@ -1,0 +1,33 @@
+<div class="task-detail-container" *ngIf="task">
+  <h2>Task Details</h2>
+
+  <label>Task:</label>
+  <input [(ngModel)]="task.text" />
+
+  <div>
+    <label>Status:</label>
+    <button (click)="toggleTask()">
+      {{ task.completed ? 'Mark as Active' : 'Mark as Completed' }}
+    </button>
+  </div>
+
+  <h3>Notes</h3>
+  <div class="note-input">
+     <input [(ngModel)]="newNote" placeholder="Enter a note..." />
+    <button (click)="addNote()"> Add Note</button>
+  </div>
+
+  <ul class="notes-list">
+    <li *ngFor="let note of task.notes; let i = index">
+      <span>{{ note }}</span>
+      <button (click)="removeNote(i)">Remove</button>
+    </li>
+  </ul>
+
+  <button (click)="goBack()"> Back to Task List</button>
+</div>
+
+<div *ngIf="!task">
+  <p>Task not found or loading...</p>
+  <button (click)="goBack()">⬅ Back to Task List</button>
+</div>
