@@ -3,6 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
+interface ActivityLog {
+  action: string;
+  timestamp: string;
+  details?: string;
+}
+
 interface TaskArray {
   text: string;
   completed: boolean;
@@ -10,6 +16,7 @@ interface TaskArray {
   id: number;
   notes?: string[];
   pdfs?: { name: string; data: string }[];
+  history?: ActivityLog[];
 }
 
 @Component({
@@ -43,6 +50,15 @@ export class TaskDetailComponent implements OnInit {
 
     if (!this.task.pdfs) {
       this.task.pdfs = [];
+    }
+
+    if (!this.task.history) {
+      this.task.history = [];
+      this.task.history.push({
+        action: 'Task Created',
+        timestamp: new Date().toISOString(),
+      });
+      this.saveTask();
     }
   }
 
@@ -99,6 +115,15 @@ export class TaskDetailComponent implements OnInit {
 
   removeFile(index: number) {
     this.task.pdfs?.splice(index, 1);
+    this.saveTask();
+  }
+
+  addHistory(action: string, details?: string) {
+    this.task.history?.push({
+      action,
+      timestamp: new Date().toISOString(),
+      details,
+    });
     this.saveTask();
   }
 }

@@ -41,6 +41,19 @@
     </li>
   </ul>
 
+  <div class="activity-log" *ngIf="task.history && task.history.length > 0">
+    <h3>Activity Log</h3>
+    <ul>
+      <li *ngFor="let log of task.history.slice().reverse()">
+        <strong>{{ log.action }}</strong>
+        <span *ngIf="log.details">: {{ log.details }}</span>
+        <div class="timestamp">
+          {{ log.timestamp | date : 'short' }}
+        </div>
+      </li>
+    </ul>
+  </div>
+
   <button (click)="goBack()">Back to Task List</button>
 </div>
 
