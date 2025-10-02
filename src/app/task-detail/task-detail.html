@@ -11,7 +11,20 @@
     </button>
   </div>
 
-  <button (click)="goBack()">⬅ Back to Task List</button>
+  <h3>Notes</h3>
+  <div class="note-input">
+     <input [(ngModel)]="newNote" placeholder="Enter a note..." />
+    <button (click)="addNote()"> Add Note</button>
+  </div>
+
+  <ul class="notes-list">
+    <li *ngFor="let note of task.notes; let i = index">
+      <span>{{ note }}</span>
+      <button (click)="removeNote(i)">Remove</button>
+    </li>
+  </ul>
+
+  <button (click)="goBack()"> Back to Task List</button>
 </div>
 
 <div *ngIf="!task">

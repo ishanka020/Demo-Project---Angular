@@ -8,6 +8,7 @@ interface TaskArray {
   text: string;
   completed: boolean;
   isEditing?: boolean;
+  notes? : string[];
 }
 
 @Component({

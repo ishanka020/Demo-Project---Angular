@@ -8,6 +8,7 @@ interface TaskArray {
   completed: boolean;
   isEditing?: boolean;
   id: number;
+  notes?: string[];
 }
 
 @Component({
@@ -20,6 +21,7 @@ interface TaskArray {
 export class TaskDetailComponent implements OnInit {
   task!: TaskArray;
   taskId!: number;
+  newNote: string ='';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -32,6 +34,10 @@ export class TaskDetailComponent implements OnInit {
 
     if (!this.task) {
       this.router.navigate(['/tasks']);
+    }
+
+    if (!this.task.notes) {
+      this.task.notes = [];
     }
   }
 
@@ -51,5 +57,18 @@ export class TaskDetailComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/tasks']);
+  }
+
+  addNote(){
+    if(this.newNote.trim() !==''){
+        this.task.notes?.push(this.newNote);
+        this.newNote='';
+        this.saveTask();
+    }
+  }
+
+  removeNote(index: number) {
+    this.task.notes?.splice(index, 1);
+    this.saveTask();
   }
 }
