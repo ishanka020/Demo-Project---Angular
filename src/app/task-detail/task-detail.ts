@@ -9,6 +9,7 @@ interface TaskArray {
   isEditing?: boolean;
   id: number;
   notes?: string[];
+  pdfs?: { name: string; data: string }[];
 }
 
 @Component({
@@ -21,7 +22,7 @@ interface TaskArray {
 export class TaskDetailComponent implements OnInit {
   task!: TaskArray;
   taskId!: number;
-  newNote: string ='';
+  newNote: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -38,6 +39,10 @@ export class TaskDetailComponent implements OnInit {
 
     if (!this.task.notes) {
       this.task.notes = [];
+    }
+
+    if (!this.task.pdfs) {
+      this.task.pdfs = [];
     }
   }
 
@@ -59,16 +64,41 @@ export class TaskDetailComponent implements OnInit {
     this.router.navigate(['/tasks']);
   }
 
-  addNote(){
-    if(this.newNote.trim() !==''){
-        this.task.notes?.push(this.newNote);
-        this.newNote='';
-        this.saveTask();
+  addNote() {
+    if (this.newNote.trim() !== '') {
+      this.task.notes?.push(this.newNote);
+      this.newNote = '';
+      this.saveTask();
     }
   }
 
   removeNote(index: number) {
     this.task.notes?.splice(index, 1);
+    this.saveTask();
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const fileData = reader.result as string;
+        this.task.pdfs?.push({ name: file.name, data: fileData });
+        this.saveTask();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('Please select a valid PDF file.');
+    }
+  }
+
+  viewFile(pdf: { name: string; data: string }) {
+    const fileURL = pdf.data;
+    window.open(fileURL, '_blank');
+  }
+
+  removeFile(index: number) {
+    this.task.pdfs?.splice(index, 1);
     this.saveTask();
   }
 }

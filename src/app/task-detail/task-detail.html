@@ -1,7 +1,6 @@
 <div class="task-detail-container" *ngIf="task">
   <h2>Task Details</h2>
 
-  <label>Task:</label>
   <input [(ngModel)]="task.text" />
 
   <div>
@@ -11,10 +10,28 @@
     </button>
   </div>
 
+  <div class="file-upload">
+    <label for="pdfUpload">Attach PDF:</label>
+    <input type="file" id="pdfUpload" accept=".pdf" (change)="onFileSelected($event)" />
+  </div>
+
+  <div *ngIf="task.pdfs && task.pdfs.length > 0" class="attached-pdfs">
+    <h3>Attached PDFs:</h3>
+    <ul>
+      <li *ngFor="let pdf of task.pdfs; let i = index">
+        {{ pdf.name }}
+        <div>
+          <button (click)="viewFile(pdf)">View</button>
+          <button (click)="removeFile(i)">Remove</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
   <h3>Notes</h3>
   <div class="note-input">
-     <input [(ngModel)]="newNote" placeholder="Enter a note..." />
-    <button (click)="addNote()"> Add Note</button>
+    <input [(ngModel)]="newNote" placeholder="Enter a note..." />
+    <button (click)="addNote()">Add Note</button>
   </div>
 
   <ul class="notes-list">
@@ -24,7 +41,7 @@
     </li>
   </ul>
 
-  <button (click)="goBack()"> Back to Task List</button>
+  <button (click)="goBack()">Back to Task List</button>
 </div>
 
 <div *ngIf="!task">
